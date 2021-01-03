@@ -1,21 +1,34 @@
+#!/usr/bin/env node
 const fs = require('fs/promises');
+const normalFs = require('fs');
+const readline = require('readline');
 
-const [regex,...paths] = process.argv.slice(2);
+const args = process.argv;
+if(args.length <= 3){
+	console.error('Sorry but the strucure must be:\nperg regex files/directories');
+	return;
+}
+const [regex,...paths] = args.slice(2);
 const [,text,flags] = regex.match(/\/(.*)\/(.*)/);
-
 async function checkPaths(regex,paths,dir = process.cwd()){
+	if(paths.length === 0) return;
 	try{
-		if(paths.length === 0) return;
 		const path = await fs.stat(dir+'/'+paths[0]);
 		if(path.isDirectory()){
 			checkPaths(regex,await fs.readdir(paths[0]),dir+'/'+paths[0]);
 		}else{
-			console.log(process.cwd());
-			const fileData =await fs.readFile(dir+'/'+paths[0],'utf8');
-			console.log(regex);
-			if(regex.test(fileData)){
-				console.log(paths[0]);
-			}
+			const readInterface = readline.createInterface({
+				input: normalFs.createReadStream(dir+'/'+paths[0]),
+				output: process.stdout,
+				console:false,
+			});
+			let counter = 1;
+			readInterface.on('line', (line) => {
+				if(regex.test(line)){
+					console.log('Line '+counter+':'+line);
+				}
+				counter++;
+			});
 		}
 		paths.shift();
 		checkPaths(regex, paths);

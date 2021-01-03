@@ -1,0 +1,20 @@
+{
+  "name": "perg",
+  "version": "1.0.0",
+  "description": "Command line tool for search coincidences of regex in files/directories",
+  "main": "index.js",
+  "bin": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexperez-cst/perg.git"
+  },
+  "author": "alexperez-cst",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexperez-cst/perg/issues"
+  },
+  "homepage": "https://github.com/alexperez-cst/perg#readme"
+}
